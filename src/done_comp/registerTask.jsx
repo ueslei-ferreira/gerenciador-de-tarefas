@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack, Input, Textarea } from "@chakra-ui/react";
+import { Box, Stack, Input, Textarea, Field, Button } from "@chakra-ui/react";
 import {
   SelectContent,
   SelectItem,
@@ -7,8 +7,8 @@ import {
   SelectRoot,
   SelectTrigger,
   SelectValueText,
-} from "@/components/ui/select";
-import { Field } from "@/components/ui/field";
+} from "../components/ui/select";
+
 
 const frameworks = [
   { label: "React.js", value: "react" },
@@ -19,11 +19,11 @@ const frameworks = [
 
 const RegisterTask = () => {
   return (
-    <Stack direction="column" w="500px">
+    <Stack direction="column" w="300px" h="500px" bg={"#dbdbdb"} borderRadius="16px" p={6}>
       <Box h={"25%"}>
-        <SelectRoot size="sm" width="320px">
-          <SelectLabel>Select framework</SelectLabel>
-          <SelectTrigger>
+        <SelectRoot size="sm" w="100%" >
+          <SelectLabel >Select framework</SelectLabel>
+          <SelectTrigger >
             <SelectValueText placeholder="Select framework" />
           </SelectTrigger>
           <SelectContent>
@@ -38,15 +38,21 @@ const RegisterTask = () => {
       <Box h={"25%"}>
         <Field.Root>
           <Field.Label>Title</Field.Label>
-          <Input placeholder="Ex. Bug Fix" />
+          <Input borderColor="black"
+            style={{ "--global-color-border": "black" }} placeholder="Ex. Bug Fix" />
         </Field.Root>
       </Box>
       <Box h={"50%"}>
         <Field.Root>
           <Field.Label>Designation</Field.Label>
-          <Textarea />
+          <Textarea
+            borderColor="black"
+            style={{ "--global-color-border": "black" }}
+            h="150px"
+            resize="none" />
         </Field.Root>
       </Box>
+      <Button variant="subtle">Subtle</Button>
     </Stack>
   );
 };
