@@ -1,42 +1,47 @@
 import { useState } from "react";
-import { Box, Stack, Input, Button, Tag, TagLabel, TagCloseTrigger } from "@chakra-ui/react";
+import { Flex, Stack, Box, Input, Button, Text, IconButton } from "@chakra-ui/react";
+import { IoMdClose } from "react-icons/io";
 
 const WorkSpace = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [classes, setClasses] = useState([]);
+  const [taskClass, setTaskClass] = useState("");
+  const [taskClasses, setTaskClasses] = useState([]);
 
-  const handleAddClass = () => {
-    if (inputValue.trim() !== "") {
-      setClasses([...classes, inputValue.trim()]);
-      setInputValue("");
+  const addTaskClass = () => {
+    if (taskClass.trim() !== "" && !taskClasses.includes(taskClass)) {
+      setTaskClasses([...taskClasses, taskClass]);
+      setTaskClass(""); // Limpa o input após adicionar
     }
   };
 
-  const handleRemoveClass = (index) => {
-    setClasses(classes.filter((_, i) => i !== index));
+  const removeTaskClass = (task) => {
+    setTaskClasses(taskClasses.filter((t) => t !== task));
   };
 
   return (
-    <Stack direction="column" w="300px" h="500px" bg="#dbdbdb" borderRadius="16px" p={6}>
-      <Box>
+    <Stack direction="column" w="100%" h="auto" bg="#dbdbdb" borderRadius="16px" p={6}>
+      <Box display="flex" flexDirection={"column"} alignItems={"center"} w={"300px"}>
         <Input
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Adicionar classe"
-          borderColor="black"
+          placeholder="Adicionar classe de tarefa"
+          value={taskClass}
+          onChange={(e) => setTaskClass(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && addTaskClass()}
+          mb={3}
         />
-        <Button mt={2} onClick={handleAddClass} colorScheme="blue">
+        <Button onClick={addTaskClass} colorScheme="blue" w="150px">
           Adicionar
         </Button>
       </Box>
-      <Box>
-        {classes.map((className, index) => (
-          <Tag key={index} size="md" colorScheme="blue" m={1}>
-            <TagLabel>{className}</TagLabel>
-            <TagCloseTrigger onClick={() => handleRemoveClass(index)} />
-          </Tag>
+
+      <Flex gap="2" wrap="wrap" maxW="40%">
+        {taskClasses.map((task, index) => (
+          <Stack key={index} direction="row" justify="space-between" align="center" p={2} bg="white" borderRadius="8px">
+            <Text>{task}</Text>
+            <IconButton size="sm" variant={"ghost"} onClick={() => removeTaskClass(task)} >
+              <IoMdClose />
+            </IconButton>
+          </Stack>
         ))}
-      </Box>
+      </Flex>
     </Stack>
   );
 };
