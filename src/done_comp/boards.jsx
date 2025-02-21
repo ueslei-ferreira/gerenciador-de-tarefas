@@ -16,6 +16,13 @@ const Boards = () => {
     }]);
   };
 
+  // Função para editar uma tarefa
+  const handleEditTask = (taskId, updatedTask) => {
+    setTasks(tasks.map(task =>
+      task.id === taskId ? { ...task, ...updatedTask } : task
+    ));
+  };
+
   return (
     <Box w="80%" h="100%" p={5}>
       <Text fontSize="3xl" fontWeight="bold" mb={5}>
@@ -23,40 +30,104 @@ const Boards = () => {
       </Text>
       <Box>
         <Box h="calc(100% - 60px)">
-          <Flex direction={["column", "row"]} gap={4}>
-            {/* Coluna To Do */}
-            <Stack
-              bg="#dbdbdb"
-              w="310px"
-              h="630px"
-              p={5}
-              borderRadius="9px"
-              overflowY="auto"
-              position="relative"
-              css={{
-                '&::-webkit-scrollbar': { width: '8px' },
-                '&::-webkit-scrollbar-track': { borderRadius: '10px' },
-                '&::-webkit-scrollbar-thumb': {
-                  background: '#888',
-                  borderRadius: '10px',
-                },
-                '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
-              }}
-            >
-              <Flex gap={2} justifyContent="space-between">
-                <Text pb={3}>To do</Text>
-                <MainDotsMenu onAddTask={handleAddTask} />
-              </Flex>
-              
-              {tasks.map((task) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
+          <Flex justify="space-between">
+            <Flex direction={["column", "row"]} gap={4}>
+              {/* Coluna To Do */}
+              <Stack
+                bg="#dbdbdb"
+                w="310px"
+                h="630px"
+                p={5}
+                borderRadius="9px"
+                overflowY="auto"
+                position="relative"
+                css={{
+                  '&::-webkit-scrollbar': { width: '8px' },
+                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: '#888',
+                    borderRadius: '10px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
+                }}
+              >
+                <Flex gap={2} justifyContent="space-between">
+                  <Text pb={3}>To do</Text>
+                  <MainDotsMenu onAddTask={handleAddTask} />
+                </Flex>
 
-            </Stack>
+                {tasks.map((task) => (
+                  <TaskCard key={task.id} task={task} onEditTask={handleEditTask} />
+                ))}
+
+              </Stack>
+            </Flex>
+            <Flex direction={["column", "row"]} gap={4}>
+              {/* Coluna In progress */}
+              <Stack
+                bg="#dbdbdb"
+                w="310px"
+                h="630px"
+                p={5}
+                borderRadius="9px"
+                overflowY="auto"
+                position="relative"
+                css={{
+                  '&::-webkit-scrollbar': { width: '8px' },
+                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: '#888',
+                    borderRadius: '10px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
+                }}
+              >
+                <Flex gap={2} justifyContent="space-between">
+                  <Text pb={3}>Done</Text>
+                  <MainDotsMenu onAddTask={handleAddTask} />
+                </Flex>
+
+                {tasks.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+
+              </Stack>
+            </Flex>
+            <Flex direction={["column", "row"]} gap={4}>
+              {/* Coluna In progress */}
+              <Stack
+                bg="#dbdbdb"
+                w="310px"
+                h="630px"
+                p={5}
+                borderRadius="9px"
+                overflowY="auto"
+                position="relative"
+                css={{
+                  '&::-webkit-scrollbar': { width: '8px' },
+                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: '#888',
+                    borderRadius: '10px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
+                }}
+              >
+                <Flex gap={2} justifyContent="space-between">
+                  <Text pb={3}>In progress</Text>
+                  <MainDotsMenu onAddTask={handleAddTask} />
+                </Flex>
+
+                {tasks.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+
+              </Stack>
+            </Flex>
           </Flex>
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 };
 
@@ -83,7 +154,7 @@ const TaskCard = ({ task }) => (
             </Box>
           </Flex>
         </Box>
-        <Box overflowY="auto">
+        <Box overflowY="auto" minH="100px">
           <Text fontSize="lg">{task.title}</Text>
           <Text fontSize="11px" pb={4} whiteSpace="pre-wrap">
             {task.description}

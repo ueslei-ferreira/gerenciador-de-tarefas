@@ -17,7 +17,7 @@ const ThreeDotsMenu = () => {
       </MenuTrigger>
       <MenuContent>
         <MenuItem value="new-txt">Edit</MenuItem>
-        <MenuItem value="new-file">Mark as done</MenuItem>
+        <MenuItem value="new-file">Change to "In progress"</MenuItem>
       </MenuContent>
     </MenuRoot>
   )

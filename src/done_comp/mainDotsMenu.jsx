@@ -7,19 +7,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../components/ui/dialog"
-import { MoreHorizontal } from "lucide-react"
+import { Plus } from "lucide-react"
 import RegisterTask from "./registerTask";
 
 const MainDotsMenu = ({ onAddTask }) => {
   return (
-    <DialogRoot>
-      <DialogTrigger asChild>
+    <DialogRoot >
+      <DialogTrigger  asChild>
         <Button variant="plain" size="icon">
-          <MoreHorizontal />
+          <Plus />
         </Button>
       </DialogTrigger>
-      
-      <DialogContent>
+      <DialogContent w="350px">
         <DialogHeader>
           <DialogTitle>Add a new task</DialogTitle>
         </DialogHeader>
