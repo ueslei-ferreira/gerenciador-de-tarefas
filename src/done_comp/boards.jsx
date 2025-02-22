@@ -1,26 +1,21 @@
 import React, { useState } from "react";
 import { Box, Flex, Text, Stack } from "@chakra-ui/react";
-import ThreeDotsMenu from "./MenuDots";
 import MainDotsMenu from "./mainDotsMenu";
 import StatusIndicator from "./indicator";
 import AvatarPerfil from "./Avatar";
+import { Pencil } from "lucide-react"; // Ícone para edição
 
 const Boards = () => {
   const [tasks, setTasks] = useState([]);
 
-  const handleAddTask = (newTask) => {
-    setTasks([...tasks, {
-      ...newTask,
-      id: Date.now(), // ID único simples
-      status: "todo"
-    }]);
-  };
-
-  // Função para editar uma tarefa
-  const handleEditTask = (taskId, updatedTask) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, ...updatedTask } : task
-    ));
+  const handleSaveTask = (task) => {
+    if (task.id) {
+      // Atualiza a tarefa existente
+      setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+    } else {
+      // Adiciona nova tarefa (atribui um ID único simples)
+      setTasks([...tasks, { ...task, id: Date.now(), status: "todo" }]);
+    }
   };
 
   return (
@@ -29,110 +24,35 @@ const Boards = () => {
         Board
       </Text>
       <Box>
-        <Box h="calc(100% - 60px)">
-          <Flex justify="space-between">
-            <Flex direction={["column", "row"]} gap={4}>
-              {/* Coluna To Do */}
-              <Stack
-                bg="#dbdbdb"
-                w="310px"
-                h="630px"
-                p={5}
-                borderRadius="9px"
-                overflowY="auto"
-                position="relative"
-                css={{
-                  '&::-webkit-scrollbar': { width: '8px' },
-                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
-                  '&::-webkit-scrollbar-thumb': {
-                    background: '#888',
-                    borderRadius: '10px',
-                  },
-                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
-                }}
-              >
-                <Flex gap={2} justifyContent="space-between">
-                  <Text pb={3}>To do</Text>
-                  <MainDotsMenu onAddTask={handleAddTask} />
-                </Flex>
-
-                {tasks.map((task) => (
-                  <TaskCard key={task.id} task={task} onEditTask={handleEditTask} />
-                ))}
-
-              </Stack>
+        <Flex justify="space-between">
+          {/* Coluna To Do */}
+          <Stack
+            bg="#dbdbdb"
+            w="310px"
+            h="630px"
+            p={5}
+            borderRadius="9px"
+            overflowY="auto"
+          >
+            <Flex gap={2} justifyContent="space-between">
+              <Text pb={3}>To do</Text>
+              {/* Para criação, usa o ícone de Plus */}
+              <MainDotsMenu
+                onAddTask={handleSaveTask}
+                titleText="Add a new task"
+              />
             </Flex>
-            <Flex direction={["column", "row"]} gap={4}>
-              {/* Coluna In progress */}
-              <Stack
-                bg="#dbdbdb"
-                w="310px"
-                h="630px"
-                p={5}
-                borderRadius="9px"
-                overflowY="auto"
-                position="relative"
-                css={{
-                  '&::-webkit-scrollbar': { width: '8px' },
-                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
-                  '&::-webkit-scrollbar-thumb': {
-                    background: '#888',
-                    borderRadius: '10px',
-                  },
-                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
-                }}
-              >
-                <Flex gap={2} justifyContent="space-between">
-                  <Text pb={3}>Done</Text>
-                  <MainDotsMenu onAddTask={handleAddTask} />
-                </Flex>
-
-                {tasks.map((task) => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-
-              </Stack>
-            </Flex>
-            <Flex direction={["column", "row"]} gap={4}>
-              {/* Coluna In progress */}
-              <Stack
-                bg="#dbdbdb"
-                w="310px"
-                h="630px"
-                p={5}
-                borderRadius="9px"
-                overflowY="auto"
-                position="relative"
-                css={{
-                  '&::-webkit-scrollbar': { width: '8px' },
-                  '&::-webkit-scrollbar-track': { borderRadius: '10px' },
-                  '&::-webkit-scrollbar-thumb': {
-                    background: '#888',
-                    borderRadius: '10px',
-                  },
-                  '&::-webkit-scrollbar-thumb:hover': { background: '#555' },
-                }}
-              >
-                <Flex gap={2} justifyContent="space-between">
-                  <Text pb={3}>In progress</Text>
-                  <MainDotsMenu onAddTask={handleAddTask} />
-                </Flex>
-
-                {tasks.map((task) => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-
-              </Stack>
-            </Flex>
-          </Flex>
-        </Box>
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} onSaveTask={handleSaveTask} />
+            ))}
+          </Stack>
+        </Flex>
       </Box>
-    </Box >
+    </Box>
   );
 };
 
-// Componente de card de tarefa reutilizável
-const TaskCard = ({ task }) => (
+const TaskCard = ({ task, onSaveTask }) => (
   <Box
     bg="white"
     w="100%"
@@ -143,17 +63,23 @@ const TaskCard = ({ task }) => (
   >
     <Box p={4}>
       <Flex direction="column" w="100%">
-        <Box w="100%">
-          <Flex justifyContent="space-between" alignItems="center" w="100%">
-            <Flex alignItems="center">
-              <StatusIndicator color="blue" />
-              <Text fontSize="xs" pl={2}>{task.class}</Text>
-            </Flex>
-            <Box>
-              <ThreeDotsMenu />
-            </Box>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Flex alignItems="center">
+            <StatusIndicator color="blue" />
+            <Text fontSize="xs" pl={2}>
+              {task.class}
+            </Text>
           </Flex>
-        </Box>
+          {/* Para edição, usamos o mesmo diálogo,
+              customizando o título e passando a tarefa a ser editada.
+              Aqui usamos o ícone Pencil para representar a ação de editar */}
+          <MainDotsMenu
+            onAddTask={onSaveTask}
+            titleText="Edit task"
+            editingTask={task}
+            triggerIcon={Pencil}
+          />
+        </Flex>
         <Box overflowY="auto" minH="100px">
           <Text fontSize="lg">{task.title}</Text>
           <Text fontSize="11px" pb={4} whiteSpace="pre-wrap">
