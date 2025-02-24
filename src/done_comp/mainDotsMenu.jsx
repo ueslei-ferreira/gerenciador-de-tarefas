@@ -10,23 +10,31 @@ import {
 import { Plus } from "lucide-react";
 import RegisterTask from "./registerTask";
 
-// Recebe opcionalmente editingTask e triggerIcon para customização
-const MainDotsMenu = ({ onAddTask, titleText, editingTask, triggerIcon }) => {
-  // Se não for passado um triggerIcon, usa o Plus por padrão
-  const TriggerIcon = triggerIcon ? triggerIcon : Plus;
+const MainDotsMenu = ({
+  onAddTask,
+  titleText,
+  triggerIcon,
+  open,           // estado controlado
+  onOpenChange,   // função para alterar o estado
+  hideTrigger = false, // se true, não renderiza o botão trigger
+}) => {
+  const TriggerIcon = triggerIcon || Plus;
+
   return (
-    <DialogRoot>
-      <DialogTrigger asChild>
-        <Button variant="plain" size="icon">
-          <TriggerIcon />
-        </Button>
-      </DialogTrigger>
+    <DialogRoot open={open} onOpenChange={onOpenChange}>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          <Button variant="plain" size="icon">
+            <TriggerIcon />
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent w="350px">
         <DialogHeader>
           <DialogTitle>{titleText}</DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <RegisterTask onAddTask={onAddTask} editingTask={editingTask} />
+          <RegisterTask onAddTask={onAddTask}/>
         </DialogBody>
       </DialogContent>
     </DialogRoot>
@@ -34,3 +42,4 @@ const MainDotsMenu = ({ onAddTask, titleText, editingTask, triggerIcon }) => {
 };
 
 export default MainDotsMenu;
+

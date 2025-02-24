@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { Button } from "@chakra-ui/react";
+import MainDotsMenu from "./mainDotsMenu";
 import {
   MenuContent,
   MenuItem,
@@ -8,7 +10,14 @@ import {
 import { MoreHorizontal } from "lucide-react";
 
 const ThreeDotsMenu = ({ onEdit }) => {
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
   return (
+    <>
     <MenuRoot>
       <MenuTrigger asChild>
         <Button variant="plain" size="icon">
@@ -16,10 +25,21 @@ const ThreeDotsMenu = ({ onEdit }) => {
         </Button>
       </MenuTrigger>
       <MenuContent>
-        <MenuItem onClick={onEdit}>Edit</MenuItem>
+        <MenuItem onClick={handleOpenDialog}>Edit</MenuItem>
         <MenuItem>Change to "In progress"</MenuItem>
       </MenuContent>
     </MenuRoot>
+
+    {isDialogOpen && (
+      <MainDotsMenu
+        onEdit={onEdit}
+        titleText="Edit task"
+        open={isDialogOpen}
+        onOpenChange={setDialogOpen}
+        hideTrigger={true} // Aqui, o botão não será renderizado
+      />
+    )}
+    </>
   );
 };
 
