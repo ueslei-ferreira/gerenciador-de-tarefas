@@ -13,15 +13,18 @@ import {
   ColorPickerTrigger,
 } from "../components/ui/color-picker";
 
+
 const WorkSpace = () => {
+  const [taskClass, setTaskClass] = useState("");
+  const [taskClasses, setTaskClasses] = useState([]);
+
   const { control, watch } = useForm({
     defaultValues: { color: "#eb5e41" },
   });
   const colorClass = watch("color");
 
-  const [taskClass, setTaskClass] = useState("");
-  const [taskClasses, setTaskClasses] = useState([]);
 
+  //seção de tarefas
   const addTaskClass = () => {
     if (taskClass.trim() !== "" && !taskClasses.some(t => t.name === taskClass)) {
       setTaskClasses([...taskClasses, { name: taskClass, color: colorClass }]);
@@ -35,43 +38,46 @@ const WorkSpace = () => {
 
   return (
     <Flex direction="column" gap={2} w="100%" h="auto" bg="#dbdbdb" borderRadius="16px" p={6}>
-      <Box display="flex" p={4} bg="white" flexDirection="column" alignItems="center" w="300px" borderRadius={9}>
-        <Box pb={2}>
-          <Input
-            placeholder="Adicionar classe de tarefa"
-            value={taskClass}
-            onChange={(e) => setTaskClass(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && addTaskClass()}
-            mb={3}
-          />
-          <Controller
-            name="color"
-            control={control}
-            render={({ field }) => (
-              <ColorPickerRoot
-                name={field.name}
-                defaultValue={parseColor(field.value)}
-                onValueChange={(e) => field.onChange(e.valueAsString)}
-              >
-                <ColorPickerControl>
-                  <ColorPickerInput />
-                  <ColorPickerTrigger />
-                </ColorPickerControl>
-                <ColorPickerContent>
-                  <ColorPickerArea />
-                  <HStack>
-                    <ColorPickerEyeDropper />
-                    <ColorPickerSliders />
-                  </HStack>
-                </ColorPickerContent>
-              </ColorPickerRoot>
-            )}
-          />
+      <Flex gap={4}>
+        <Box display="flex" p={4} bg="white" flexDirection="column" alignItems="center" w="300px" borderRadius={9}>
+          <Box pb={2}>
+            <Input
+              placeholder="Adicionar classe de tarefa"
+              value={taskClass}
+              onChange={(e) => setTaskClass(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && addTaskClass()}
+              mb={3}
+            />
+            <Controller
+              name="color"
+              control={control}
+              render={({ field }) => (
+                <ColorPickerRoot
+                  name={field.name}
+                  defaultValue={parseColor(field.value)}
+                  onValueChange={(e) => field.onChange(e.valueAsString)}
+                >
+                  <ColorPickerControl>
+                    <ColorPickerInput />
+                    <ColorPickerTrigger />
+                  </ColorPickerControl>
+                  <ColorPickerContent>
+                    <ColorPickerArea />
+                    <HStack>
+                      <ColorPickerEyeDropper />
+                      <ColorPickerSliders />
+                    </HStack>
+                  </ColorPickerContent>
+                </ColorPickerRoot>
+              )}
+            />
+          </Box>
+          <Button onClick={addTaskClass} colorScheme="blue" w="150px">
+            Adicionar
+          </Button>
+
         </Box>
-        <Button onClick={addTaskClass} colorScheme="blue" w="150px">
-          Adicionar
-        </Button>
-      </Box>
+      </Flex>
 
       <Flex gap="2" wrap="wrap" maxW="40%">
         {taskClasses.map((task, index) => (

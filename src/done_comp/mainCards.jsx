@@ -1,7 +1,7 @@
 import { Flex, Text, Stack } from "@chakra-ui/react";
 import MainDotsMenu from "./mainDotsMenu";
 import TaskCard from "./taskCard";
-const Card = ({titleText, handleSaveTask, tasks, }) => {
+const Card = ({titleText, handleSaveTask, tasks}) => {
     return (
         <Stack
             bg="#dbdbdb"

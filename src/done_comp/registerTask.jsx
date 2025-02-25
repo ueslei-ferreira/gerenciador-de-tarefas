@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "../components/ui/select";
+import DeadLine from "./prazo";
 
 const frameworks = [
   { label: "React.js", value: "react" },
@@ -20,6 +21,8 @@ const RegisterTask = ({ onAddTask, editingTask }) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [calculatedDate, setCalculatedDate] = useState("");
+  
   const contentRef = useRef(null);
 
   useEffect(() => {
@@ -27,6 +30,7 @@ const RegisterTask = ({ onAddTask, editingTask }) => {
       setSelectedValue(editingTask.class);
       setTitle(editingTask.title);
       setDescription(editingTask.description);
+      setCalculatedDate(editingTask.deadline || "");
     }
   }, [editingTask]);
 
@@ -37,12 +41,14 @@ const RegisterTask = ({ onAddTask, editingTask }) => {
       id: editingTask?.id, // Mantém o ID se estiver editando
       class: selectedValue,
       title,
-      description
+      description,
+      deadline: calculatedDate,
     });
 
     setSelectedValue("");
     setTitle("");
     setDescription("");
+    setCalculatedDate("");
   };
 
   return (
@@ -87,6 +93,8 @@ const RegisterTask = ({ onAddTask, editingTask }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </Box>
+      
+      <DeadLine calculatedDate={calculatedDate} setCalculatedDate={setCalculatedDate}/>
 
       <Button variant="solid" colorScheme="blue" onClick={handleSubmit}>
         {editingTask ? "Save Changes" : "Register Task"}
